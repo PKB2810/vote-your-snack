@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "964816287759",
+    "firebase_url": "https://snack-vote.firebaseio.com",
+    "project_id": "snack-vote",
+    "storage_bucket": "snack-vote.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964816287759:android:bdda3018bb58ca0a",
+        "android_client_info": {
+          "package_name": "com.awesomeproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "964816287759-n2h7c284v5d4i4adfo7fsc7aodq29cl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaMzAgDBGoNtPK2enSJ0ys6jX0U_WgUT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "964816287759-n2h7c284v5d4i4adfo7fsc7aodq29cl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
