@@ -35,6 +35,12 @@ class DisplaySnackToUser extends React.Component {
               <TextContent>{context.snackName}</TextContent>
               <TextContent>Would you like to have it?</TextContent>
               <RadioBtn />
+              <Button
+                title="Submit my Vote"
+                onPress={() => {
+                  this.props.navigation.navigate("LandingPage");
+                }}
+              />
             </View>
           </>
         )}

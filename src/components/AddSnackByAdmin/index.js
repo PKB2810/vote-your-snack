@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Button } from "react-native";
 import TextBox from "../TextBox";
 import TextContent from "../TextContent";
 import NotifyBtn from "../NotifyBtn";
@@ -44,7 +44,9 @@ class AddSnackByAdmin extends React.Component {
                   this.props.navigation.navigate("LandingPage");
                 }}
               />
-              <TextContent>Number of votes:{context.noOfVotes}</TextContent>
+              <TextContent>
+                Number of people want to have it:{context.noOfYesVotes}
+              </TextContent>
             </View>
           </>
         )}

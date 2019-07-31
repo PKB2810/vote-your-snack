@@ -9,7 +9,8 @@ class SnackProvider extends React.Component {
     super(props);
     this.state = {
       snackName: "",
-      noOfVotes: 0,
+      noOfYesVotes: 0,
+      noOfYNoVotes: 0,
       vote: "",
       voteOption: ["Yes", "No"],
       currentUser: null
@@ -89,7 +90,19 @@ class SnackProvider extends React.Component {
   };
 
   castVote = vote => {
-    this.setState({ vote: vote });
+    this.setState({ vote: vote }, () => {
+      if (this.state.vote === "Yes") {
+        this.setState({
+          noOfYesVotes: this.state.noOfYesVotes + 1,
+          noOfYNoVotes: this.state.noOfYNoVotes - 1
+        });
+      } else {
+        this.setState({
+          noOfYesVotes: this.state.noOfYesVotes - 1,
+          noOfYNoVotes: this.state.noOfYNoVotes + 1
+        });
+      }
+    });
   };
 
   render() {
@@ -97,7 +110,7 @@ class SnackProvider extends React.Component {
       <SnackContext.Provider
         value={{
           snackName: this.state.snackName,
-          noOfVotes: this.state.noOfVotes,
+          noOfYesVotes: this.state.noOfYesVotes,
           vote: this.state.vote,
           voteOption: this.state.voteOption,
           setSnack: this.setSnack,
