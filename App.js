@@ -9,9 +9,12 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import { AsyncStorage } from "react-native";
 import SnackProvider from "./src/components/Provider";
 import LoginPage from "./src/components/LoginPage";
 import LandingPage from "./src/components/LandingPage";
+import DisplaySnackToUser from "./src/components/DisplaySnackToUser";
+import AddSnackByAdmin from "./src/components/AddSnackByAdmin";
 
 const loginPageStyle = StyleSheet.create({
   loginPageParent: {
@@ -22,10 +25,21 @@ const loginPageStyle = StyleSheet.create({
     height: "100%"
   }
 });
+getCurrentUser = async () => {
+  try {
+    const currentUser = await AsyncStorage.getItem("currentUser");
+    return currentUser;
+  } catch (error) {
+    // Error retrieving data
+    alert.alert(JSON.stringify(error));
+  }
+};
 const AppStack = createStackNavigator(
   {
     LoginPage: LoginPage,
-    LandingPage: LandingPage
+    LandingPage: LandingPage,
+    DisplaySnackToUser: DisplaySnackToUser,
+    AddSnackByAdmin: AddSnackByAdmin
   },
   {
     initialRouteName: "LoginPage"

@@ -2,6 +2,7 @@ import React from "react";
 import { GoogleSignin } from "react-native-google-signin";
 import { Alert } from "react-native";
 import SnackContext from "../../../context/SnackContext";
+import { AsyncStorage } from "react-native";
 
 class SnackProvider extends React.Component {
   constructor(props) {
@@ -15,34 +16,78 @@ class SnackProvider extends React.Component {
     };
   }
   componentDidMount() {
-    GoogleSignin.configure({
-      //It is mandatory to call this method before attempting to call signIn()
-      scopes: [],
-      // Repleace with your webClientId generated from Firebase console
-      webClientId:
-        "964816287759-n2h7c284v5d4i4adfo7fsc7aodq29cl2.apps.googleusercontent.com"
-    });
+    GoogleSignin.configure();
   }
 
-  signIn = async () => {
+  persistUser = async () => {
     try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      this.setState({ currentUser: JSON.stringify(userInfo) });
+      await AsyncStorage.setItem(
+        "currentUser",
+        JSON.stringify(this.state.currentUser.name)
+      );
     } catch (error) {
-      Alert.alert(error);
+      Alert.alert(JSON.stringify(error));
+      // Error saving data
     }
   };
 
-  setSnack = text => {
-    this.setState({
-      snackName: text
+  clearUser = async () => {
+    try {
+      await AsyncStorage.removeItem("currentUser");
+    } catch (exception) {
+      Alert.alert(JSON.stringify(error));
+    }
+  };
+  promisedSetState = user => {
+    return new Promise(resolve => {
+      this.setState({ currentUser: user }, () => {
+        resolve();
+      });
     });
   };
+  signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
 
-  onNotify = () => {
-    //post snack name
+      let userInfo = await GoogleSignin.signIn();
+      //let userInfo = await user;
+      //Alert.alert("signed in");
+      // Alert.alert(JSON.stringify(userInfo.user.name));
+      console.log(JSON.stringify(userInfo.user.name));
+      //allow navigation only after currentUser is set
+      await this.promisedSetState(userInfo.user);
+      this.persistUser();
+      //this.setState({ currentUser: JSON.stringify(userInfo.user) });
+      //
+    } catch (error) {
+      console.log(error);
+      Alert.alert(JSON.stringify(error));
+      // Alert.alert(error);
+    }
   };
+  signOut = async () => {
+    try {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      await this.promisedSetState(null);
+      // this.clearUser();
+      // this.setState({ user: null }); // Remember to remove the user from your app's state as well
+    } catch (error) {
+      console.error(error);
+      Alert.alert(JSON.stringify(error));
+    }
+  };
+  onNotify = snackName => {
+    this.setState(
+      {
+        snackName: snackName
+      },
+      () => {
+        Alert.alert("Notified");
+      }
+    );
+  };
+
   castVote = vote => {
     this.setState({ vote: vote });
   };
@@ -59,6 +104,7 @@ class SnackProvider extends React.Component {
           onNotify: this.onNotify,
           castVote: this.castVote,
           signIn: this.signIn,
+          signOut: this.signOut,
           currentUser: this.state.currentUser
         }}
       >

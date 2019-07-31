@@ -1,6 +1,6 @@
 import React from "react";
 import SnackContext from "../../../context/SnackContext";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const radioBtnStyle = StyleSheet.create({
   buttonContainer: {
@@ -40,7 +40,7 @@ function RadioBtn(props) {
                   onPress={() => context.castVote(item)}
                 >
                   {context.vote === item && (
-                    <View style={styles.checkedCircle} />
+                    <View style={radioBtnStyle.checkedCircle} />
                   )}
                 </TouchableOpacity>
               </View>

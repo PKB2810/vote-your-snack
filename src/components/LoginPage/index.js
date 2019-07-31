@@ -14,8 +14,8 @@ class LoginPage extends React.Component {
               style={{ width: 192, height: 48 }}
               size={GoogleSigninButton.Size.Wide}
               color={GoogleSigninButton.Color.Dark}
-              onPress={() => {
-                context.signIn();
+              onPress={async () => {
+                await context.signIn();
 
                 this.props.navigation.navigate("LandingPage");
               }}
