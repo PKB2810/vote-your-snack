@@ -13,7 +13,8 @@ class SnackProvider extends React.Component {
       noOfYNoVotes: 0,
       vote: "",
       voteOption: ["Yes", "No"],
-      currentUser: null
+      currentUser: null,
+      isAdmin: false
     };
   }
   componentDidMount() {
@@ -88,7 +89,9 @@ class SnackProvider extends React.Component {
       }
     );
   };
-
+  setIsAdmin = () => {
+    this.setState({ isAdmin: !this.state.isAdmin });
+  };
   castVote = vote => {
     this.setState({ vote: vote }, () => {
       if (this.state.vote === "Yes") {
@@ -114,6 +117,8 @@ class SnackProvider extends React.Component {
           vote: this.state.vote,
           voteOption: this.state.voteOption,
           setSnack: this.setSnack,
+          isAdmin: this.state.isAdmin,
+          setIsAdmin: this.setIsAdmin,
           onNotify: this.onNotify,
           castVote: this.castVote,
           signIn: this.signIn,

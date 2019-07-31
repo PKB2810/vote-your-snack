@@ -18,9 +18,6 @@ import AddSnackByAdmin from "./src/components/AddSnackByAdmin";
 
 const loginPageStyle = StyleSheet.create({
   loginPageParent: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
     width: "100%",
     height: "100%"
   }
@@ -51,7 +48,7 @@ export default class App extends React.Component {
   render() {
     return (
       <SnackProvider>
-        <AppContainer />
+        <AppContainer style={loginPageStyle.loginPageParent} />
       </SnackProvider>
     );
   }

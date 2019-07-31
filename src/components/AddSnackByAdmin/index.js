@@ -38,12 +38,14 @@ class AddSnackByAdmin extends React.Component {
             <View style={adminPageStyle.adminParent}>
               <TextContent>Today's snack</TextContent>
               <TextBox value={this.state.snackName} setValue={this.setSnack} />
-              <NotifyBtn
-                pressHandler={() => {
-                  context.onNotify(this.state.snackName);
-                  this.props.navigation.navigate("LandingPage");
-                }}
-              />
+              {this.state.snackName.trim() !== "" && (
+                <NotifyBtn
+                  pressHandler={() => {
+                    context.onNotify(this.state.snackName);
+                    this.props.navigation.navigate("LandingPage");
+                  }}
+                />
+              )}
               <TextContent>
                 Number of people want to have it:{context.noOfYesVotes}
               </TextContent>
