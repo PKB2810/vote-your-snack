@@ -9,9 +9,8 @@ const loginStyle = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "flex-start",
-    width: "100%",
-    height: "100%"
+    flex: 1,
+    justifyContent: "space-around"
   },
   textStyle: {
     fontSize: 20,

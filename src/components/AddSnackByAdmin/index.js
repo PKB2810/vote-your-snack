@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Button } from "react-native";
+import { View, StyleSheet, Button, Text } from "react-native";
 import TextBox from "../TextBox";
 import TextContent from "../TextContent";
 import NotifyBtn from "../NotifyBtn";
@@ -13,9 +13,17 @@ const adminPageStyle = StyleSheet.create({
   }
 });
 class AddSnackByAdmin extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { snackName: "" };
+  static contextType = SnackContext;
+  constructor(props, context) {
+    super(props, context);
+    const snackName = this.context.snackName;
+    this.state = { snackName: snackName };
+  }
+  componentDidMount() {
+    // this.context.checkIfUserSignedIn();
+    //this.context.getPersistedData();
+    this.context.getSnack();
+    this.context.getVote();
   }
   setSnack = text => {
     this.setState({
@@ -36,19 +44,20 @@ class AddSnackByAdmin extends React.Component {
               }}
             />
             <View style={adminPageStyle.adminParent}>
-              <TextContent>Today's snack</TextContent>
+              <Text>Today's snack</Text>
               <TextBox value={this.state.snackName} setValue={this.setSnack} />
               {this.state.snackName.trim() !== "" && (
                 <NotifyBtn
                   pressHandler={() => {
                     context.onNotify(this.state.snackName);
-                    this.props.navigation.navigate("LandingPage");
+                    // this.props.navigation.navigate("LandingPage");
                   }}
                 />
               )}
-              <TextContent>
+
+              <Text>
                 Number of people want to have it:{context.noOfYesVotes}
-              </TextContent>
+              </Text>
             </View>
           </>
         )}

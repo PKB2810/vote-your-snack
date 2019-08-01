@@ -22,15 +22,18 @@ const loginPageStyle = StyleSheet.create({
     height: "100%"
   }
 });
+const currentUser = null;
+console.log(currentUser);
 getCurrentUser = async () => {
   try {
-    const currentUser = await AsyncStorage.getItem("currentUser");
-    return currentUser;
+    currentUser = await AsyncStorage.getItem("currentUser");
+    console.log(currentUser);
   } catch (error) {
     // Error retrieving data
     alert.alert(JSON.stringify(error));
   }
 };
+
 const AppStack = createStackNavigator(
   {
     LoginPage: LoginPage,
@@ -39,7 +42,7 @@ const AppStack = createStackNavigator(
     AddSnackByAdmin: AddSnackByAdmin
   },
   {
-    initialRouteName: "LoginPage"
+    initialRouteName: currentUser === null ? "LoginPage" : "DisplaySnackToUser" // this.getCurrentUser() !== null ? "DisplaySnackToUser" :
   }
 );
 const AppContainer = createAppContainer(AppStack);

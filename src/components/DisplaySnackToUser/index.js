@@ -1,5 +1,6 @@
 import React from "react";
-import { View, StyleSheet, Button, AsyncStorage } from "react-native";
+import { View, StyleSheet, Button, AsyncStorage, Alert } from "react-native";
+import { GoogleSignin } from "react-native-google-signin";
 import SnackContext from "../../../context/SnackContext";
 import TextContent from "../TextContent";
 import RadioBtn from "../RadioBtn";
@@ -13,11 +14,19 @@ const userPageStyle = StyleSheet.create({
   }
 });
 class DisplaySnackToUser extends React.Component {
+  static contextType = SnackContext;
+  componentDidMount() {
+    // this.context.checkIfUserSignedIn();
+    //this.context.getPersistedData();
+    this.context.getSnack();
+    this.context.getVote();
+  }
+
   render() {
     return (
       <SnackContext.Consumer>
         {context => (
-          <>
+          <View>
             <Button
               title="Sign Out"
               onPress={async () => {
@@ -26,6 +35,7 @@ class DisplaySnackToUser extends React.Component {
                 this.props.navigation.navigate("LoginPage");
               }}
             />
+
             {context.currentUser && (
               <Header>{"Welcome " + context.currentUser.name}</Header>
             )}
@@ -38,11 +48,12 @@ class DisplaySnackToUser extends React.Component {
               <Button
                 title="Submit my Vote"
                 onPress={() => {
-                  this.props.navigation.navigate("LandingPage");
+                  context.storeVote();
+                  //  this.props.navigation.navigate("LandingPage");
                 }}
               />
             </View>
-          </>
+          </View>
         )}
       </SnackContext.Consumer>
     );
