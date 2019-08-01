@@ -10,8 +10,18 @@ const adminPageStyle = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center"
+  },
+  btnStyle: {
+    width: 192,
+    height: 48
+  },
+  signOutBtnStyle: {
+    width: 192,
+    height: 48,
+    alignSelf: "flex-end"
   }
 });
+
 class AddSnackByAdmin extends React.Component {
   static contextType = SnackContext;
   constructor(props, context) {
@@ -35,16 +45,18 @@ class AddSnackByAdmin extends React.Component {
       <SnackContext.Consumer>
         {context => (
           <>
-            <Button
-              title="Sign Out"
-              onPress={async () => {
-                await context.signOut();
+            <View style={adminPageStyle.signOutBtnStyle}>
+              <Button
+                title="Sign Out"
+                onPress={async () => {
+                  await context.signOut();
 
-                this.props.navigation.navigate("LoginPage");
-              }}
-            />
+                  this.props.navigation.navigate("LoginPage");
+                }}
+              />
+            </View>
             <View style={adminPageStyle.adminParent}>
-              <Text>Today's snack</Text>
+              <TextContent>Today's snack</TextContent>
               <TextBox value={this.state.snackName} setValue={this.setSnack} />
               {this.state.snackName.trim() !== "" && (
                 <NotifyBtn
@@ -55,9 +67,9 @@ class AddSnackByAdmin extends React.Component {
                 />
               )}
 
-              <Text>
+              <TextContent>
                 Number of people want to have it:{context.noOfYesVotes}
-              </Text>
+              </TextContent>
             </View>
           </>
         )}

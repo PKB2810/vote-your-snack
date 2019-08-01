@@ -1,8 +1,25 @@
 import React from "react";
-import { Button } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 
+const notifyBtn = StyleSheet.create({
+  btnStyle: {
+    width: 192,
+    height: 48,
+    alignSelf: "center"
+  },
+
+  textBoxStyle: {
+    width: "90%",
+    borderColor: "black",
+    borderRadius: 10
+  }
+});
 function NotifyBtn(props) {
-  return <Button onPress={props.pressHandler} title="Notify" color="#841584" />;
+  return (
+    <View style={notifyBtn.btnStyle}>
+      <Button onPress={props.pressHandler} title="Notify" />
+    </View>
+  );
 }
 
 export default NotifyBtn;

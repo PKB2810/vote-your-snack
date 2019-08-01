@@ -4,7 +4,8 @@ import { StyleSheet, Text } from "react-native";
 const headingStyle = StyleSheet.create({
   textStyle: {
     fontSize: 20,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    textAlign: "center"
   }
 });
 function Header(props) {

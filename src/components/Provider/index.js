@@ -214,7 +214,7 @@ class SnackProvider extends React.Component {
   };
 
   onNotify = snackName => {
-    this.storeData(snackName);
+    this.storeSnack(snackName);
     // this.persistUser();
     Alert.alert("Notified");
   };

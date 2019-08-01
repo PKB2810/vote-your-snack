@@ -1,8 +1,15 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, StyleSheet } from "react-native";
 
+const textContent = StyleSheet.create({
+  textStyle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center"
+  }
+});
 function TextContent(props) {
-  return <Text>{props.children}</Text>;
+  return <Text style={textContent.textStyle}>{props.children}</Text>;
 }
 
 export default TextContent;

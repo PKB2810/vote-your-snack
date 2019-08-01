@@ -1,5 +1,13 @@
 import React from "react";
-import { View, StyleSheet, Button, AsyncStorage, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Button,
+  AsyncStorage,
+  Alert,
+  Text,
+  TouchableOpacity
+} from "react-native";
 import { GoogleSignin } from "react-native-google-signin";
 import SnackContext from "../../../context/SnackContext";
 import TextContent from "../TextContent";
@@ -11,8 +19,30 @@ const userPageStyle = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center"
+  },
+  textStyle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  signOutBtnStyle: {
+    width: 192,
+    height: 48,
+    alignSelf: "flex-end"
+  },
+  btnStyle: {
+    width: 192,
+    height: 48,
+    alignSelf: "center"
+  },
+
+  textBoxStyle: {
+    width: "90%",
+    borderColor: "black",
+    borderRadius: 10
   }
 });
+
 class DisplaySnackToUser extends React.Component {
   static contextType = SnackContext;
   componentDidMount() {
@@ -26,15 +56,17 @@ class DisplaySnackToUser extends React.Component {
     return (
       <SnackContext.Consumer>
         {context => (
-          <View>
-            <Button
-              title="Sign Out"
-              onPress={async () => {
-                await context.signOut();
+          <View style={userPageStyle.userParent}>
+            <View style={userPageStyle.signOutBtnStyle}>
+              <Button
+                title="Sign Out"
+                onPress={async () => {
+                  await context.signOut();
 
-                this.props.navigation.navigate("LoginPage");
-              }}
-            />
+                  this.props.navigation.navigate("LoginPage");
+                }}
+              />
+            </View>
 
             {context.currentUser && (
               <Header>{"Welcome " + context.currentUser.name}</Header>
@@ -45,13 +77,15 @@ class DisplaySnackToUser extends React.Component {
               <TextContent>{context.snackName}</TextContent>
               <TextContent>Would you like to have it?</TextContent>
               <RadioBtn />
-              <Button
-                title="Submit my Vote"
-                onPress={() => {
-                  context.storeVote();
-                  //  this.props.navigation.navigate("LandingPage");
-                }}
-              />
+              <View style={userPageStyle.btnStyle}>
+                <Button
+                  title="Submit my Vote"
+                  onPress={() => {
+                    context.storeVote();
+                    //  this.props.navigation.navigate("LandingPage");
+                  }}
+                />
+              </View>
             </View>
           </View>
         )}
