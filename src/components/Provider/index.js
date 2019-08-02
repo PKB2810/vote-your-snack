@@ -176,7 +176,7 @@ class SnackProvider extends React.Component {
             date: data[key].date,
             vote: data[key].vote,
             snackName: data[key].snackName,
-            user: this.state.currentUser.name
+            user: data[key].user
           });
         }
         this.extrDataFromUserArr(userInfoArr);
@@ -190,7 +190,7 @@ class SnackProvider extends React.Component {
     const myVote = userInfoArr.filter(
       item =>
         item.date === this.state.date.toString() &&
-        item.user === this.state.currentUser.name
+        item.user === this.state.currentUser.email
     )[0];
     this.setState({
       vote: myVote.vote,
@@ -203,7 +203,7 @@ class SnackProvider extends React.Component {
     reqObj.date = this.state.date;
     reqObj.snackName = this.state.snackName;
     reqObj.vote = this.state.vote;
-    reqObj.user = this.state.currentUser.name;
+    reqObj.user = this.state.currentUser.email;
     fetch("https://snack-app-5cec3.firebaseio.com/user-votes.json", {
       method: "POST",
       body: JSON.stringify(reqObj)
