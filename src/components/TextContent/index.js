@@ -1,11 +1,12 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 const textContent = StyleSheet.create({
   textStyle: {
     fontSize: 20,
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
+    height: "10%"
   }
 });
 function TextContent(props) {

@@ -9,7 +9,10 @@ const adminPageStyle = StyleSheet.create({
   adminParent: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center"
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    height: "90%",
+    width: "100%"
   },
   btnStyle: {
     width: 192,
@@ -19,6 +22,14 @@ const adminPageStyle = StyleSheet.create({
     width: 192,
     height: 48,
     alignSelf: "flex-end"
+  },
+  childContainerStyle: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    height: "50%",
+    width: "100%"
   }
 });
 
@@ -57,15 +68,21 @@ class AddSnackByAdmin extends React.Component {
             </View>
             <View style={adminPageStyle.adminParent}>
               <TextContent>Today's snack</TextContent>
-              <TextBox value={this.state.snackName} setValue={this.setSnack} />
-              {this.state.snackName.trim() !== "" && (
-                <NotifyBtn
-                  pressHandler={() => {
-                    context.onNotify(this.state.snackName);
-                    // this.props.navigation.navigate("LandingPage");
-                  }}
+
+              <View style={adminPageStyle.childContainerStyle}>
+                <TextBox
+                  value={this.state.snackName}
+                  setValue={this.setSnack}
                 />
-              )}
+                {this.state.snackName.trim() !== "" && (
+                  <NotifyBtn
+                    pressHandler={() => {
+                      context.onNotify(this.state.snackName);
+                      // this.props.navigation.navigate("LandingPage");
+                    }}
+                  />
+                )}
+              </View>
 
               <TextContent>
                 Number of people want to have it:{context.noOfYesVotes}

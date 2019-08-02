@@ -3,8 +3,8 @@ import { Button, StyleSheet, View } from "react-native";
 
 const notifyBtn = StyleSheet.create({
   btnStyle: {
-    width: 192,
-    height: 48,
+    width: "40%",
+    height: "20%",
     alignSelf: "center"
   },
 
