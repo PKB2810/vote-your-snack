@@ -141,16 +141,29 @@ class SnackProvider extends React.Component {
 
         this.extrDataFromSnackArr(snackInfoArr);
       })
-      .catch(err => Alert.alert(JSON.stringify(err)));
+      .catch(err => console.log(JSON.stringify(err)));
   };
   extrDataFromSnackArr = snackInfoArr => {
-    const snack = snackInfoArr.find(
-      snack => snack.date.toString() === this.state.date.toString()
-    );
-    const snackName = snack.snackName;
-    this.setState({
-      snackName: snackName
-    });
+    try {
+      const snack = snackInfoArr.find(
+        snack => snack.date.toString() === this.state.date.toString()
+      );
+      if (snack === undefined && this.state.isAdmin) {
+        throw new Error("Hey admin! What is today's snack?");
+      }
+      if (snack === undefined && !this.state.isAdmin) {
+        throw new Error(
+          "Hey user! Snack is yet to be added.Till then grab a snickers!"
+        );
+      }
+      const snackName = snack.snackName;
+
+      this.setState({
+        snackName: snackName
+      });
+    } catch (err) {
+      Alert.alert(err.message);
+    }
   };
   storeSnack = snackName => {
     const reqObj = {};
@@ -181,22 +194,56 @@ class SnackProvider extends React.Component {
         }
         this.extrDataFromUserArr(userInfoArr);
       })
-      .catch(err => Alert.alert(JSON.stringify(err)));
+      .catch(err => Alert.alert(JSON.stringify(err.message)));
   };
   extrDataFromUserArr = userInfoArr => {
-    const snack = userInfoArr.filter(
-      snack => snack.date === this.state.date.toString() && snack.vote === "Yes"
-    );
-    const myVote = userInfoArr.filter(
-      item =>
-        item.date === this.state.date.toString() &&
-        item.user === this.state.currentUser.email
-    )[0];
-    this.setState({
-      vote: myVote.vote,
-      snackName: snack[0].snackName,
-      noOfYesVotes: snack.length
-    });
+    try {
+      const snack = userInfoArr.filter(
+        snack =>
+          snack.date === this.state.date.toString() && snack.vote === "Yes"
+      );
+
+      if (this.state.isAdmin) {
+        //msg for admin if no user yet has voted in favour of snack
+        if (
+          snack === undefined ||
+          (snack !== undefined &&
+            snack.length === 0 &&
+            this.state.snackName !== "")
+        ) {
+          throw new Error("No votes in favour of current snack");
+        }
+        if (snack.length !== 0) {
+          this.setState({
+            snackName: snack[0].snackName,
+            noOfYesVotes: snack.length
+          });
+        }
+      } else {
+        const myVote = userInfoArr.filter(
+          item =>
+            item.date === this.state.date.toString() &&
+            item.user === this.state.currentUser.email
+        )[0];
+        //error msg for user if his vote hasnt been registered yet
+        if (
+          (myVote !== undefined &&
+            myVote.length === 0 &&
+            !this.state.isAdmin &&
+            this.state.snackName !== "") ||
+          (myVote === undefined && this.state.isAdmin === false)
+        ) {
+          throw new Error("You haven't voted yet.Please do cast your vote");
+        }
+        if (this.state.isAdmin === false) {
+          this.setState({
+            vote: myVote.vote
+          });
+        }
+      }
+    } catch (err) {
+      Alert.alert(err.message);
+    }
   };
   storeVote = () => {
     const reqObj = {};
