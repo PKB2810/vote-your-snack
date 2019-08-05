@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>756242063233-9h2tbd2326i4h7uk694epvkobhjkqroj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.756242063233-9h2tbd2326i4h7uk694epvkobhjkqroj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyClPZpxoil6ixNgYIWmhMpXoeDMeB7gk4c</string>
+	<key>GCM_SENDER_ID</key>
+	<string>756242063233</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.example.snacksApp</string>
+	<key>PROJECT_ID</key>
+	<string>snack-app-5cec3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>snack-app-5cec3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:756242063233:ios:397cf9f77816ea81</string>
+	<key>DATABASE_URL</key>
+	<string>https://snack-app-5cec3.firebaseio.com</string>
+</dict>
+</plist>

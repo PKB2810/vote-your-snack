@@ -15,7 +15,8 @@ class SnackProvider extends React.Component {
       voteOption: ["Yes", "No"],
       currentUser: null,
       isAdmin: false,
-      date: ""
+      date: "",
+      currUserInfoArr: []
     };
   }
   componentDidMount() {
@@ -127,7 +128,7 @@ class SnackProvider extends React.Component {
   };
 
   getSnack = () => {
-    fetch("https://snack-app-5cec3.firebaseio.com/snack.json")
+    return fetch("https://snack-app-5cec3.firebaseio.com/snack.json")
       .then(response => response.json())
       .then(data => {
         let snackInfoArr = [];
@@ -180,19 +181,27 @@ class SnackProvider extends React.Component {
   };
 
   getVote = () => {
-    fetch("https://snack-app-5cec3.firebaseio.com/user-votes.json")
+    return fetch("https://snack-app-5cec3.firebaseio.com/user-votes.json")
       .then(response => response.json())
       .then(data => {
         let userInfoArr = [];
         for (let key in data) {
           userInfoArr.push({
+            key: key,
             date: data[key].date,
             vote: data[key].vote,
             snackName: data[key].snackName,
             user: data[key].user
           });
         }
-        this.extrDataFromUserArr(userInfoArr);
+        this.setState(
+          {
+            currUserInfoArr: userInfoArr
+          },
+          () => {
+            this.extrDataFromUserArr(userInfoArr);
+          }
+        );
       })
       .catch(err => Alert.alert(JSON.stringify(err.message)));
   };
@@ -245,19 +254,49 @@ class SnackProvider extends React.Component {
       Alert.alert(err.message);
     }
   };
-  storeVote = () => {
+  storeVote = async () => {
+    await this.getVote();
+    const currUserRec = this.state.currUserInfoArr.find(
+      record =>
+        record.user === this.state.currentUser.email &&
+        record.date === this.state.date
+    );
     const reqObj = {};
     reqObj.date = this.state.date;
     reqObj.snackName = this.state.snackName;
     reqObj.vote = this.state.vote;
     reqObj.user = this.state.currentUser.email;
-    fetch("https://snack-app-5cec3.firebaseio.com/user-votes.json", {
-      method: "POST",
-      body: JSON.stringify(reqObj)
-    })
-      .then(response => response.json())
-      .then(res => Alert.alert("success"))
-      .catch(err => Alert.alert("error"));
+    if (currUserRec) {
+      fetch(
+        "https://snack-app-5cec3.firebaseio.com/user-votes/" +
+          currUserRec.key +
+          ".json",
+        {
+          method: "PUT",
+          body: JSON.stringify(reqObj),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      )
+        .then(response => {
+          console.log(response);
+          response.json();
+        })
+        .then(res => {
+          console.log(res);
+          Alert.alert("Your vote has been updated successfully!");
+        })
+        .catch(err => Alert.alert(err.message));
+    } else {
+      fetch("https://snack-app-5cec3.firebaseio.com/user-votes.json", {
+        method: "POST",
+        body: JSON.stringify(reqObj)
+      })
+        .then(response => response.json())
+        .then(res => Alert.alert("Your vote has been registered successfully!"))
+        .catch(err => Alert.alert("error"));
+    }
   };
 
   onNotify = snackName => {
@@ -271,9 +310,9 @@ class SnackProvider extends React.Component {
     });
   };
   castVote = vote => {
-    this.setState({
+    this.setState((prevState, props) => ({
       vote: vote
-    }); /* , () => {
+    })); /* , () => {
       this.storeVotes();
       /*  if (this.state.vote === "Yes") {
         this.setState({

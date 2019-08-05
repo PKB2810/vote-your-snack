@@ -45,12 +45,19 @@ const userPageStyle = StyleSheet.create({
 
 class DisplaySnackToUser extends React.Component {
   static contextType = SnackContext;
+  static navigationOptions = {
+    title: "User"
+  };
   componentDidMount() {
     // this.context.checkIfUserSignedIn();
     //this.context.getPersistedData();
-    this.context.getSnack();
-    this.context.getVote();
+    this.fetchData();
   }
+
+  fetchData = async () => {
+    await this.context.getSnack();
+    await this.context.getVote();
+  };
 
   render() {
     return (

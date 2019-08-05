@@ -28,6 +28,9 @@ const loginStyle = StyleSheet.create({
   }
 });
 class LoginPage extends React.Component {
+  static navigationOptions = {
+    title: "Admin"
+  };
   render() {
     return (
       <SnackContext.Consumer>
