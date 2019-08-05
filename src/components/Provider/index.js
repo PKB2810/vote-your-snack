@@ -194,14 +194,9 @@ class SnackProvider extends React.Component {
             user: data[key].user
           });
         }
-        this.setState(
-          {
-            currUserInfoArr: userInfoArr
-          },
-          () => {
-            this.extrDataFromUserArr(userInfoArr);
-          }
-        );
+        this.setState({
+          currUserInfoArr: userInfoArr
+        });
       })
       .catch(err => Alert.alert(JSON.stringify(err.message)));
   };
@@ -310,9 +305,9 @@ class SnackProvider extends React.Component {
     });
   };
   castVote = vote => {
-    this.setState((prevState, props) => ({
+    this.setState({
       vote: vote
-    })); /* , () => {
+    }); /* , () => {
       this.storeVotes();
       /*  if (this.state.vote === "Yes") {
         this.setState({
@@ -350,7 +345,9 @@ class SnackProvider extends React.Component {
           storeSnack: this.storeSnack,
           getPersistedData: this.getPersistedData,
           checkIfUserSignedIn: this.checkIfUserSignedIn,
-          currentUser: this.state.currentUser
+          currentUser: this.state.currentUser,
+          currUserInfoArr: this.state.currUserInfoArr,
+          extrDataFromUserArr: this.extrDataFromUserArr
         }}
       >
         {this.props.children}

@@ -57,6 +57,7 @@ class DisplaySnackToUser extends React.Component {
   fetchData = async () => {
     await this.context.getSnack();
     await this.context.getVote();
+    this.context.extrDataFromUserArr(this.context.currUserInfoArr);
   };
 
   render() {
