@@ -16,13 +16,38 @@ class SnackProvider extends React.Component {
       currentUser: null,
       isAdmin: false,
       date: "",
-      currUserInfoArr: []
+      currUserInfoArr: [],
+      userList: []
     };
   }
   componentDidMount() {
     GoogleSignin.configure();
+    this.fetchUserList();
     this.setDate();
   }
+
+  fetchUserList = async () => {
+    await this.getUserList();
+  };
+  getUserList = async () => {
+    return fetch("https://snack-app-5cec3.firebaseio.com/user-list.json")
+      .then(response => response.json())
+      .then(data => {
+        let userListArr = [];
+        for (let key in data) {
+          userListArr.push({
+            empId: key,
+            email: data[key].email,
+            isAdmin: data[key].isAdmin
+          });
+        }
+
+        this.setState({
+          userList: userListArr
+        });
+      })
+      .catch(err => console.log(JSON.stringify(err)));
+  };
   setDate = () => {
     let currentDate = new Date();
     let day = currentDate.getDate();
@@ -73,11 +98,22 @@ class SnackProvider extends React.Component {
     }
   };
   promisedSetState = user => {
-    return new Promise(resolve => {
-      this.setState({ currentUser: user }, () => {
-        resolve();
+    let authorizedUser = this.state.userList.find(
+      userRecord => userRecord.email === user.email
+    );
+    if (authorizedUser) {
+      return new Promise(resolve => {
+        this.setState({ currentUser: user }, function() {
+          this.setState({ isAdmin: authorizedUser.isAdmin }, function() {
+            resolve({
+              currUser: this.state.currentUser,
+              isAdmin: this.state.isAdmin
+            });
+          });
+        });
       });
-    });
+    }
+    throw new Error("You are not authorized!");
   };
   checkIfUserSignedIn = async () => {
     try {
@@ -105,13 +141,17 @@ class SnackProvider extends React.Component {
 
       console.log(JSON.stringify(userInfo.user.name));
       //allow navigation only after currentUser is set
-      await this.promisedSetState(userInfo.user);
+      const currUserpromiseObj = await this.promisedSetState(userInfo.user);
+
+      return currUserpromiseObj;
+
       // this.persistUser();
       //this.setState({ currentUser: JSON.stringify(userInfo.user) });
       //
     } catch (error) {
-      console.log(error);
-      Alert.alert(JSON.stringify(error));
+      // console.log(error);
+      this.signOut();
+      Alert.alert(error.message);
       // Alert.alert(error);
     }
   };
@@ -150,10 +190,10 @@ class SnackProvider extends React.Component {
         snack => snack.date.toString() === this.state.date.toString()
       );
       if (snack === undefined && this.state.isAdmin) {
-        throw new Error("Hey admin! What is today's snack?");
+        Alert.alert("Hey admin! What is today's snack?");
       }
       if (snack === undefined && !this.state.isAdmin) {
-        throw new Error(
+        Alert.alert(
           "Hey user! Snack is yet to be added.Till then grab a snickers!"
         );
       }
@@ -209,41 +249,26 @@ class SnackProvider extends React.Component {
 
       if (this.state.isAdmin) {
         //msg for admin if no user yet has voted in favour of snack
-        if (
-          snack === undefined ||
-          (snack !== undefined &&
-            snack.length === 0 &&
-            this.state.snackName !== "")
-        ) {
-          throw new Error("No votes in favour of current snack");
+        if (snack.length === 0 && this.state.snackName !== "") {
+          Alert.alert("No votes in favour of current snack");
         }
-        if (snack.length !== 0) {
-          this.setState({
-            snackName: snack[0].snackName,
-            noOfYesVotes: snack.length
-          });
-        }
+
+        this.setState({
+          noOfYesVotes: snack.length
+        });
+      }
+      const myVote = userInfoArr.filter(
+        item =>
+          item.date === this.state.date.toString() &&
+          item.user === this.state.currentUser.email
+      )[0];
+      //error msg for user if his vote hasnt been registered yet
+      if (myVote.length === 0) {
+        Alert.alert("You haven't voted yet.Please do cast your vote");
       } else {
-        const myVote = userInfoArr.filter(
-          item =>
-            item.date === this.state.date.toString() &&
-            item.user === this.state.currentUser.email
-        )[0];
-        //error msg for user if his vote hasnt been registered yet
-        if (
-          (myVote !== undefined &&
-            myVote.length === 0 &&
-            !this.state.isAdmin &&
-            this.state.snackName !== "") ||
-          (myVote === undefined && this.state.isAdmin === false)
-        ) {
-          throw new Error("You haven't voted yet.Please do cast your vote");
-        }
-        if (this.state.isAdmin === false) {
-          this.setState({
-            vote: myVote.vote
-          });
-        }
+        this.setState({
+          vote: myVote.vote
+        });
       }
     } catch (err) {
       Alert.alert(err.message);
@@ -299,11 +324,7 @@ class SnackProvider extends React.Component {
     // this.persistUser();
     Alert.alert("Notified");
   };
-  setIsAdmin = () => {
-    this.setState({ isAdmin: !this.state.isAdmin }, () => {
-      // this.persistUser();
-    });
-  };
+
   castVote = vote => {
     this.setState({
       vote: vote
@@ -334,7 +355,6 @@ class SnackProvider extends React.Component {
           voteOption: this.state.voteOption,
           setSnack: this.setSnack,
           isAdmin: this.state.isAdmin,
-          setIsAdmin: this.setIsAdmin,
           onNotify: this.onNotify,
           castVote: this.castVote,
           signIn: this.signIn,

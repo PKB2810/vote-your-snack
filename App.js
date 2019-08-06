@@ -7,8 +7,12 @@
  */
 
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { View, StyleSheet, Alert } from "react-native";
+import {
+  createStackNavigator,
+  createBottomTabNavigator,
+  createAppContainer
+} from "react-navigation";
 import { AsyncStorage } from "react-native";
 import SnackProvider from "./src/components/Provider";
 import LoginPage from "./src/components/LoginPage";
@@ -30,19 +34,21 @@ getCurrentUser = async () => {
     console.log(currentUser);
   } catch (error) {
     // Error retrieving data
-    alert.alert(JSON.stringify(error));
+    Alert.alert(JSON.stringify(error));
   }
 };
-
+const AdminTab = createBottomTabNavigator({
+  AddSnackByAdmin: AddSnackByAdmin,
+  DisplaySnackToUser: DisplaySnackToUser
+});
 const AppStack = createStackNavigator(
   {
     LoginPage: LoginPage,
-    LandingPage: LandingPage,
-    DisplaySnackToUser: DisplaySnackToUser,
-    AddSnackByAdmin: AddSnackByAdmin
+    AdminTab: AdminTab,
+    DisplaySnackToUser: DisplaySnackToUser
   },
   {
-    initialRouteName: currentUser === null ? "LoginPage" : "DisplaySnackToUser" // this.getCurrentUser() !== null ? "DisplaySnackToUser" :
+    initialRouteName: "LoginPage" // this.getCurrentUser() !== null ? "DisplaySnackToUser" :
   }
 );
 const AppContainer = createAppContainer(AppStack);

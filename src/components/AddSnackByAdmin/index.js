@@ -46,7 +46,13 @@ class AddSnackByAdmin extends React.Component {
   componentDidMount() {
     // this.context.checkIfUserSignedIn();
     //this.context.getPersistedData();
-    this.fetchData();
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.fetchData();
+    });
+  }
+  componentWillUnmount() {
+    // Remove the event listener
+    this.focusListener.remove();
   }
   fetchData = async () => {
     await this.context.getSnack();

@@ -9,6 +9,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { GoogleSignin } from "react-native-google-signin";
+
 import SnackContext from "../../../context/SnackContext";
 import TextContent from "../TextContent";
 import RadioBtn from "../RadioBtn";
@@ -51,7 +52,13 @@ class DisplaySnackToUser extends React.Component {
   componentDidMount() {
     // this.context.checkIfUserSignedIn();
     //this.context.getPersistedData();
-    this.fetchData();
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.fetchData();
+    });
+  }
+  componentWillUnmount() {
+    // Remove the event listener
+    this.focusListener.remove();
   }
 
   fetchData = async () => {

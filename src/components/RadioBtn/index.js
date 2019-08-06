@@ -5,7 +5,7 @@ import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
 const voteBtnStyle = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     marginBottom: 30
   },
   btnStyle: {
@@ -19,7 +19,7 @@ class RadioBtn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      bgColor: "blue"
+      bgColor: "transparent"
     };
   }
   render() {
@@ -39,7 +39,7 @@ class RadioBtn extends React.Component {
                     {context.vote === item && (
                       <View
                         style={{
-                          backgroundColor: "red",
+                          backgroundColor: "green",
                           width: "100%",
                           height: "100%"
                         }}
@@ -59,7 +59,7 @@ class RadioBtn extends React.Component {
                     {context.vote !== item && (
                       <View
                         style={{
-                          backgroundColor: "blue",
+                          backgroundColor: "transparent",
                           width: "100%",
                           height: "100%"
                         }}
@@ -69,7 +69,7 @@ class RadioBtn extends React.Component {
                             fontSize: 20,
                             fontWeight: "bold",
                             textAlign: "center",
-                            color: "white"
+                            color: "black"
                           }}
                         >
                           {item}

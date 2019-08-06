@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, CheckBox, Text } from "react-native";
+import { View, StyleSheet, CheckBox, Text, Alert } from "react-native";
 import { GoogleSigninButton } from "react-native-google-signin";
 import SnackContext from "../../../context/SnackContext";
 import Header from "../Header";
@@ -29,7 +29,7 @@ const loginStyle = StyleSheet.create({
 });
 class LoginPage extends React.Component {
   static navigationOptions = {
-    title: "Admin"
+    title: "Login Page"
   };
   render() {
     return (
@@ -42,22 +42,16 @@ class LoginPage extends React.Component {
               size={GoogleSigninButton.Size.Wide}
               color={GoogleSigninButton.Color.Dark}
               onPress={async () => {
-                await context.signIn();
-                if (context.isAdmin) {
-                  this.props.navigation.navigate("AddSnackByAdmin");
-                } else {
-                  this.props.navigation.navigate("DisplaySnackToUser");
+                const currUserpromiseObj = await context.signIn();
+                if (currUserpromiseObj) {
+                  if (currUserpromiseObj.isAdmin) {
+                    this.props.navigation.navigate("AddSnackByAdmin");
+                  } else {
+                    this.props.navigation.navigate("DisplaySnackToUser");
+                  }
                 }
               }}
             />
-            <View style={loginStyle.checkBoxStyle}>
-              <CheckBox
-                title="Are you an admin?"
-                onValueChange={context.setIsAdmin}
-                value={context.isAdmin}
-              />
-              <Text style={loginStyle.textStyle}>Are you an admin?</Text>
-            </View>
           </View>
         )}
       </SnackContext.Consumer>
