@@ -189,19 +189,20 @@ class SnackProvider extends React.Component {
       const snack = snackInfoArr.find(
         snack => snack.date.toString() === this.state.date.toString()
       );
-      if (snack === undefined && this.state.isAdmin) {
-        Alert.alert("Hey admin! What is today's snack?");
+      if (snack === undefined) {
+        if (this.state.isAdmin) {
+          Alert.alert("Hey admin! What is today's snack?");
+        } else {
+          Alert.alert(
+            "Hey user! Snack is yet to be added.Till then grab a snickers!"
+          );
+        }
+      } else {
+        const snackName = snack.snackName;
+        this.setState({
+          snackName: snackName
+        });
       }
-      if (snack === undefined && !this.state.isAdmin) {
-        Alert.alert(
-          "Hey user! Snack is yet to be added.Till then grab a snickers!"
-        );
-      }
-      const snackName = snack.snackName;
-
-      this.setState({
-        snackName: snackName
-      });
     } catch (err) {
       Alert.alert(err.message);
     }
@@ -263,7 +264,7 @@ class SnackProvider extends React.Component {
           item.user === this.state.currentUser.email
       )[0];
       //error msg for user if his vote hasnt been registered yet
-      if (myVote.length === 0) {
+      if (myVote === undefined) {
         Alert.alert("You haven't voted yet.Please do cast your vote");
       } else {
         this.setState({
